@@ -5,13 +5,13 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(422).json({ message: 'Some required fields are missing' });
+    return res.status(400).json({ message: 'Some required fields are missing' });
   }
   const user = await loginService.findUser(email);
   console.log(email);
 
   if (!user || user.password !== password) {
-    return res.status(422).json({ message: 'Invalid fields' });
+    return res.status(400).json({ message: 'Invalid fields' });
   }
 
   const userNoPass = {
@@ -22,7 +22,7 @@ const login = async (req, res) => {
 
   const token = jwtUtil.createToken(userNoPass);
 
-  return res.status(201).json({ token });
+  return res.status(200).json({ token });
 };
 
 module.exports = {
