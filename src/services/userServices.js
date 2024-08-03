@@ -1,5 +1,10 @@
 const { User } = require('../models');
 
+const getAll = async () => {
+  const getUsers = await User.findAll({ attributes: { exclude: ['password'] } });
+  return getUsers;
+};
+
 const createPostUser = async ({ displayName, email, password, image }) => {
   const newUser = {
     displayName,
@@ -18,4 +23,5 @@ const createPostUser = async ({ displayName, email, password, image }) => {
 
 module.exports = {
   createPostUser,
+  getAll,
 };

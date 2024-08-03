@@ -3,7 +3,7 @@ const jwt = require('../utils/jwtUtil');
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
 
-  if (!authorization) return res.status(403).json({ message: 'Token not found' });
+  if (!authorization) return res.status(401).json({ message: 'Token not found' });
   const bearer = authorization.split(' ')[1];
 
   try {
@@ -12,6 +12,6 @@ module.exports = (req, res, next) => {
     req.user = data;
     next(); 
   } catch (e) {
-    return res.status(500).json({ message: 'Invalid token' });
+    return res.status(401).json({ message: 'Expired or invalid token' });
   }
 };
