@@ -17,6 +17,7 @@ app.use(express.json());
 app.use('/login', loginroutes);
 app.use('/user', userRoutes);
 app.use(authMiddleware);
+
 // É importante exportar a constante `app`,
 // para que possa ser utilizada pelo arquivo `src/server.js`
 module.exports = app;

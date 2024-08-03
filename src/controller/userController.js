@@ -8,9 +8,7 @@ const getAllUsers = async (_req, res) => {
 const getAllbyid = async (req, res) => {
   const { id } = req.params;
   const byID = await userService.getAllbyid(id);
-  if (!byID) {
-    return res.status(404).json({ message: 'User does not exist' });
-  }
+  if (!byID) return res.status(404).json({ message: 'User does not exist' });
   return res.status(200).json(byID);
 };
 

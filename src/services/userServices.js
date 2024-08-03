@@ -6,7 +6,7 @@ const getAll = async () => {
 };
 
 const getAllbyid = async (id) => {
-  const getById = await User.findAll({
+  const getById = await User.findOne({
     where: { id },
     attributes: { exclude: ['password'] },
   });
