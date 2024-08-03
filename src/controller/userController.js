@@ -5,6 +5,14 @@ const getAllUsers = async (_req, res) => {
   const Users = await userService.getAll();
   return res.status(200).json(Users);
 };
+const getAllbyid = async (req, res) => {
+  const { id } = req.params;
+  const byID = await userService.getAllbyid(id);
+  if (!byID) {
+    return res.status(404).json({ message: 'User does not exist' });
+  }
+  return res.status(200).json(byID);
+};
 
 const createPostUser = async (req, res) => {
   const { displayName, email, password, image } = req.body;
@@ -18,4 +26,5 @@ const createPostUser = async (req, res) => {
 module.exports = {
   createPostUser,
   getAllUsers,
+  getAllbyid,
 };

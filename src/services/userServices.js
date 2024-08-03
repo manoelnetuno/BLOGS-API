@@ -5,6 +5,13 @@ const getAll = async () => {
   return getUsers;
 };
 
+const getAllbyid = async (id) => {
+  const getById = await User.findAll({
+    where: { id },
+    attributes: { exclude: ['password'] },
+  });
+  return getById;
+};
 const createPostUser = async ({ displayName, email, password, image }) => {
   const newUser = {
     displayName,
@@ -24,4 +31,5 @@ const createPostUser = async ({ displayName, email, password, image }) => {
 module.exports = {
   createPostUser,
   getAll,
+  getAllbyid,
 };

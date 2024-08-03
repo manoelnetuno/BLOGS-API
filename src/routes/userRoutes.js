@@ -5,6 +5,7 @@ const authmiddlaware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 router.get('/', authmiddlaware, userController.getAllUsers);
+router.get('/:id', authmiddlaware, userController.getAllbyid);
 router.post(
   '/', 
   middleware.validateUser,
