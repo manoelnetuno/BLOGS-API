@@ -3,7 +3,7 @@ const { BlogPost, PostCategory, sequelize, User, Category } = require('../models
 const getAllBlogs = async () => {
   const allBlogs = await BlogPost.findAll({
     include: [
-      { model: User, as: 'User' },
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
@@ -13,7 +13,7 @@ const getAllbyid = async (id) => {
   const getById = await BlogPost.findOne({
     where: { id },
     include: [
-      { model: User, as: 'User' },
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
       { model: Category, as: 'categories', through: { attributes: [] } },
     ],
   });
@@ -40,12 +40,12 @@ const createPostBlog = async ({ title, content, userId, categoryIds }) => {
   }
 };
 const updateBlogs = async (id, { content, title }) => {
-  await BlogPost.update({ content, title }, { where: { id } });
-
-  const blogsUP = await BlogPost.findByPk(id);
+  await BlogPost.update({ content, title }, { 
+    where: { id },
+  });
+  const blogsUP = await getAllbyid(id);
   return blogsUP;
 };
-
 const deleteBlogs = async (id) => {
   await BlogPost.destroy({ where: { id } });
 };

@@ -1,4 +1,5 @@
 const { blogPostService } = require('../services');
+const { Category } = require('../models');
 
 const getAllBlogs = async (_req, res) => {
   const blogs = await blogPostService.getAllBlogs();
@@ -11,22 +12,21 @@ const getAllbyid = async (req, res) => {
   return res.status(200).json(blogs);
 };
 const PostCreate = async (req, res) => {
-  try {
-    const { title, content, categoryIds } = req.body;
-    const { user } = req;
-    if (!title || !content || !categoryIds) {
-      return res.status(400).json({ message: 'Some required fields are missing' });
-    }
-    const newBlogPost = await blogPostService.createPostBlog({ 
-      title, 
-      content, 
-      userId: user.id, 
-      categoryIds });
-    return res.status(201).json(newBlogPost);
-  } catch (e) {
-    console.error(e);
-    return res.status(500).json({ message: 'Erro ao criar blog post' });
+  const { title, content, categoryIds } = req.body;
+  const { user } = req;
+  if (!title || !content || !categoryIds) {
+    return res.status(400).json({ message: 'Some required fields are missing' });
   }
+  const categories = await Category.findAll({ where: { id: categoryIds } });
+  if (categories.length !== categoryIds.length) {
+    return res.status(400).json({ message: 'one or more "categoryIds" not found' });
+  }
+  const newBlogPost = await blogPostService.createPostBlog({ 
+    title, 
+    content, 
+    userId: user.id, 
+    categoryIds });
+  return res.status(201).json(newBlogPost);
 };
 const updateBlogs = async (req, res) => {
   const { id } = req.params;
@@ -37,7 +37,7 @@ const updateBlogs = async (req, res) => {
   }
   const blogsCreator = await blogPostService.getAllbyid(id);
   if (blogsCreator.id !== user.id) {
-    res.status(401).json({ message: 'Unauthorized user' });
+    return res.status(401).json({ message: 'Unauthorized user' });
   }
   const BlogsUpdated = await blogPostService.updateBlogs(id, { content, title });
   return res.status(200).json(BlogsUpdated);
